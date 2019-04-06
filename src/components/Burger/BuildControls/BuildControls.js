@@ -16,7 +16,8 @@ const buildControl = (props) => {
                     key={oControl.label}
                     label={oControl.label}
                     added={() => props.addedIngredient(oControl.type)}
-                    removed={() => props.removedIngredient(oControl.type)}/>
+                    removed={() => props.removedIngredient(oControl.type)}
+                    disabled={props.disabled[oControl.type]}/>
             ))}
         </div>
     );

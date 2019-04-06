@@ -12,54 +12,49 @@ const INGREDIENT_PRICES = {
 
 class BurgerBuilder extends Component {
     state = {
-        ingredients : {
-            salad: 1,
-            bacon: 1,
-            cheese: 2,
-            meat: 2
-        },
+        ingredients : [
+            "salad",
+            "bacon",
+            "cheese",
+            "meat"
+        ],
         totalPrice: 4
     };
 
     addIngredientHandler = (sType) => {
-        const iOldCount = this.state.ingredients[sType];
-        const iNewCount = iOldCount + 1;
-        const oUpdatedIngredients = {
-            ...this.state.ingredients
-        };
-        oUpdatedIngredients[sType] = iNewCount;
-        const iNewPrice = this.state.totalPrice + INGREDIENT_PRICES[sType];
-
+        const aNewIngredients = [sType, ...this.state.ingredients];
         this.setState({
-            ingredients: oUpdatedIngredients,
-            totalPrice: iNewPrice
+            ingredients: aNewIngredients,
         });
     };
 
     removeIngredientHandler = (sType) => {
-        const iOldCount = this.state.ingredients[sType];
-        if(iOldCount > 0) {
-            const iNewCount = iOldCount - 1;
-            const oUpdatedIngredients = {
-                ...this.state.ingredients
-            };
-            oUpdatedIngredients[sType] = iNewCount;
-            const iNewPrice = this.state.totalPrice - INGREDIENT_PRICES[sType];
-    
-            this.setState({
-                ingredients: oUpdatedIngredients,
-                totalPrice: iNewPrice
-            });
+        const aNewIngredients = [...this.state.ingredients];
+        if(aNewIngredients.length > 0) {
+            if(aNewIngredients.indexOf(sType) >= 0) {
+                aNewIngredients.splice(aNewIngredients.indexOf(sType), 1 );
+                this.setState({
+                    ingredients: aNewIngredients
+                });
+            }
         }
     };
 
     render () {
+        const oDisabledInfo = {...INGREDIENT_PRICES};
+        console.log("oDisabledInfo",oDisabledInfo);
+        for (let key in oDisabledInfo) {
+            oDisabledInfo[key] = this.state.ingredients.indexOf(key) < 0;
+        }
+        console.log("oDisabledInfo",oDisabledInfo);
+
         return (
             <Aux>
                 <Burger ingredients={this.state.ingredients}/>
                 <BuildControls 
                     addedIngredient={this.addIngredientHandler}
-                    removedIngredient={this.removeIngredientHandler}/>
+                    removedIngredient={this.removeIngredientHandler}
+                    disabled={oDisabledInfo}/>
             </Aux>
         )
     }
