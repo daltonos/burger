@@ -10,7 +10,8 @@ const aControls = [
 ];
 const buildControl = (props) => {
     return (
-        <div className={styles.BuildControls}>
+        <div className={styles.BuildControls} style={{textAlign: "center"}}>
+            <p>Price: {props.price.toFixed(2)}</p>
             {aControls.map(oControl => (
                 <BuildControl
                     key={oControl.label}
@@ -19,6 +20,7 @@ const buildControl = (props) => {
                     removed={() => props.removedIngredient(oControl.type)}
                     disabled={props.disabled[oControl.type]}/>
             ))}
+            <button  className={styles.PurchaseButton} disabled={props.purchasable}>Place Order</button>
         </div>
     );
 };

@@ -6,47 +6,54 @@ import BuildControls from "../../components/Burger/BuildControls/BuildControls";
 const INGREDIENT_PRICES = {
     salad: 1,
     bacon: 1,
-    cheese: 2,
-    meat: 2
+    cheese: 2.5,
+    meat: 3.75
 }
 
 class BurgerBuilder extends Component {
     state = {
-        ingredients : [
-            "salad",
-            "bacon",
-            "cheese",
-            "meat"
-        ],
-        totalPrice: 4
+        ingredients : [],
+        totalPrice: 0,
+        purchasable: true
     };
+
+    updatePurchasable = (aIngredients) => {
+        const bPurchasable = aIngredients.length > 0
+        this.setState({purchasable: !bPurchasable});
+    }
 
     addIngredientHandler = (sType) => {
         const aNewIngredients = [sType, ...this.state.ingredients];
+        const dCurrPrice = this.state.totalPrice; 
+        const dNewPrice = dCurrPrice + INGREDIENT_PRICES[sType];
         this.setState({
             ingredients: aNewIngredients,
+            totalPrice: dNewPrice
         });
+        this.updatePurchasable(aNewIngredients);
     };
 
     removeIngredientHandler = (sType) => {
         const aNewIngredients = [...this.state.ingredients];
+        const dCurrPrice = this.state.totalPrice; 
+        const dNewPrice = dCurrPrice - INGREDIENT_PRICES[sType];
         if(aNewIngredients.length > 0) {
             if(aNewIngredients.indexOf(sType) >= 0) {
                 aNewIngredients.splice(aNewIngredients.indexOf(sType), 1 );
                 this.setState({
-                    ingredients: aNewIngredients
+                    ingredients: aNewIngredients,
+                    totalPrice:dNewPrice
                 });
             }
         }
+        this.updatePurchasable(aNewIngredients);
     };
 
     render () {
         const oDisabledInfo = {...INGREDIENT_PRICES};
-        console.log("oDisabledInfo",oDisabledInfo);
         for (let key in oDisabledInfo) {
             oDisabledInfo[key] = this.state.ingredients.indexOf(key) < 0;
         }
-        console.log("oDisabledInfo",oDisabledInfo);
 
         return (
             <Aux>
@@ -54,7 +61,9 @@ class BurgerBuilder extends Component {
                 <BuildControls 
                     addedIngredient={this.addIngredientHandler}
                     removedIngredient={this.removeIngredientHandler}
-                    disabled={oDisabledInfo}/>
+                    disabled={oDisabledInfo}
+                    price={this.state.totalPrice}
+                    purchasable={this.state.purchasable}/>
             </Aux>
         )
     }
