@@ -53,6 +53,7 @@ class BurgerBuilder extends Component {
     };
 
     showModal = () => {
+        console.log("hey");
         this.setState({purchasing: true});
     }
 
