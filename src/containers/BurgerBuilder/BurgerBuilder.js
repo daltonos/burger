@@ -20,7 +20,6 @@ const INGREDIENT_PRICES = {
 class BurgerBuilder extends Component {
     state = {
         ingredients : [],
-        purchasable: true,
         purchasing: false
     };
 
@@ -38,8 +37,7 @@ class BurgerBuilder extends Component {
     }
 
     updatePurchasable = (aIngredients) => {
-        const bPurchasable = aIngredients.length > 0
-        this.setState({purchasable: !bPurchasable});
+        return aIngredients.length > 0
     }
 
     showModal = () => {
@@ -91,7 +89,7 @@ class BurgerBuilder extends Component {
                     removedIngredient={this.props.onIngredientRemoved}
                     disabled={oDisabledInfo}
                     price={this.props.tPrice}
-                    purchasable={this.state.purchasable}
+                    purchasable={!this.updatePurchasable(this.props.ings)}
                     showOrder={this.showModal}/>
             </Aux>
         )
