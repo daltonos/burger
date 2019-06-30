@@ -1,7 +1,9 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
+import axios from "../../../axios-orders";
+
 import Button from "../../../components/UI/Button/Button";
 import styles from "./ContactData.module.css";
-import axios from "../../../axios-orders";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import Input from "../../../components/UI/Input/Input";
 
@@ -123,8 +125,8 @@ class ContactData extends Component {
             formData[formIdentifier] = this.state.orderForm[formIdentifier].value;
         }
         const order = {
-            ingredients: this.props.ingredients,
-            price: this.props.totalPrice,
+            ingredients: this.props.ings,
+            price: this.props.price,
             orderData: formData
         };
         axios.post("/orders.json", order)
@@ -136,7 +138,7 @@ class ContactData extends Component {
             this.setState({loading: false});
             console.error(err);
         });
-        console.log(this.props.ingredients);
+        console.log(this.props.ings);
     }
 
     render () {
@@ -175,4 +177,10 @@ class ContactData extends Component {
     }
 }
 
-export default ContactData;
+const mapStateToProps = state => {
+    return {
+        ings: state.ingredients,
+        price: state.totalPrice
+    }
+}
+export default connect(mapStateToProps)(ContactData);
