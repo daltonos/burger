@@ -8,7 +8,7 @@ const aControls = [
     {label: "Meat", type: "meat"},
     {label: "Bacon", type: "bacon"}
 ];
-const buildControl = (props) => {
+const buildControls = (props) => {
     return (
         <div className={styles.BuildControls} style={{textAlign: "center"}}>
             <p>Price: {props.price.toFixed(2)}</p>
@@ -28,4 +28,4 @@ const buildControl = (props) => {
     );
 };
 
-export default buildControl;
+export default buildControls;
