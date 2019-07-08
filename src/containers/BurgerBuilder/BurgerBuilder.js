@@ -24,7 +24,8 @@ class BurgerBuilder extends Component {
     };
 
     componentDidMount = () => {
-        console.log('Burger Builder componentDidMount', this.props);//todo
+        console.log('Burger Builder componentDidMount', this.props);
+        this.props.onInitIngredients();
     }
 
     updatePurchasable = (aIngredients) => {
@@ -87,17 +88,19 @@ class BurgerBuilder extends Component {
 const mapStateToProps = state => {
     return {
         ings: state.ingredients,
-        tPrice: state.totalPrice
+        tPrice: state.totalPrice,
+        error: state.error
     }
 }
 
-const mapDispatachToProps = dispatch => {
+const mapDispatchToProps = dispatch => {
     return {
         onIngredientAdded: (ingName) => dispatch(burgerBuilderActions.addIngredient(ingName)),
-        onIngredientRemoved: (ingName) => dispatch(burgerBuilderActions.removeIngredient(ingName))
+        onIngredientRemoved: (ingName) => dispatch(burgerBuilderActions.removeIngredient(ingName)),
+        onInitIngredients: () => dispatch(burgerBuilderActions.initIngredients())
     }
 }
 
 
 //ToDo add axios withError
-export default connect(mapStateToProps, mapDispatachToProps)(BurgerBuilder);
+export default connect(mapStateToProps, mapDispatchToProps)(BurgerBuilder);
