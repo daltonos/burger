@@ -117,6 +117,7 @@ class ContactData extends Component {
     }
 
     orderHandler = (event) => {
+        console.log("[Contact Data orderHandler]");
         event.preventDefault();
 
         const formData = {};

@@ -43,6 +43,7 @@ class BurgerBuilder extends Component {
 
     orderContinued = () => {
         this.props.onInitPurchase();
+        console.log("orderContinued", this.props.history);
         this.props.history.push("/checkout");
     }
 
