@@ -42,5 +42,46 @@ export const purchaseBurger = (orderData) => {
 export const purchaseInit = () => {
     return {
         type: actionTypes.PURCHASE_INIT
+    };
+}
+
+export const loadUserOrders = () => {
+    return dispatch => {
+        dispatch(loadUserOrdersStart());
+        axios.get("/orders.json")
+        .then(res => {
+            const orders = [];
+            for (let key in res.data) {
+                orders.push({
+                    id: key,
+                    ...res.data[key]
+                });
+            }
+            console.log(orders);
+            dispatch(loadUserOrdersSuccess(orders));
+        })
+        .catch(err => {
+            dispatch(loadUserOrdersFail(err));
+            console.error(err);
+        });
+    };
+}
+
+export const loadUserOrdersStart = () => {
+    return {
+        type: actionTypes.LOAD_USER_ORDERS_START
+    }
+}
+
+export const loadUserOrdersSuccess = (orders) => {
+    return {
+        type: actionTypes.LOAD_USER_ORDERS_SUCCESS,
+        orders: orders
+    }
+}
+
+export const loadUserOrdersFail = (err) => {
+    return {
+        type: actionTypes.LOAD_USER_ORDERS_FAIL
     }
 }
