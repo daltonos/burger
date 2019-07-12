@@ -32,7 +32,9 @@ export const initIngredients = () => {
     return dispatch => {
         axios.get("/initial-state/ingredients.json").then(
             res => {
-                dispatch(setIngredients(res.data));
+                console.log({res});
+                const ingredientsToSet = res.data && res.data.length ? res.data : [];
+                dispatch(setIngredients(ingredientsToSet));
             }
         ).catch(
             err => {

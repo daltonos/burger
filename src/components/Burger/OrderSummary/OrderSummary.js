@@ -4,13 +4,15 @@ import Button from "../../UI/Button/Button"
 
 const orderSummary = (props) => {
     const oIngredientsSummary = {};
-    props.ingredients.forEach(sIngredient => {
-        if (sIngredient in oIngredientsSummary) {
-            oIngredientsSummary[sIngredient]++;
-        } else {
-            oIngredientsSummary[sIngredient] = 1;
-        }
-    });
+    if (props.ingredients && props.ingredients.length) {
+        props.ingredients.forEach(sIngredient => {
+            if (sIngredient in oIngredientsSummary) {
+                oIngredientsSummary[sIngredient]++;
+            } else {
+                oIngredientsSummary[sIngredient] = 1;
+            }
+        });
+    }
     const aIngredientsSummary = Object.keys(oIngredientsSummary).map(sIngredientKey => {
         return ( <li key={sIngredientKey}>
                     <span style={{textTransform: "capitalize"}}>{sIngredientKey}</span> {oIngredientsSummary[sIngredientKey]}

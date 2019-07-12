@@ -8,7 +8,7 @@ import Modal from "../../components/UI/Modal/Modal";
 import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 import Spinner from "../../components/UI/Spinner/Spinner";
 //import * as actionTypes from '../../store/actions/actionTypes'
-import * as burgerBuilderActions from '../../store/actions/index';
+import * as actions from '../../store/actions/index';
 
 const INGREDIENT_PRICES = {
     salad: 1,
@@ -29,7 +29,7 @@ class BurgerBuilder extends Component {
     }
 
     updatePurchasable = (aIngredients) => {
-        return aIngredients.length > 0
+        return aIngredients && aIngredients.length > 0;
     }
 
     showModal = () => {
@@ -42,15 +42,11 @@ class BurgerBuilder extends Component {
     }
 
     orderContinued = () => {
+        this.props.onInitPurchase();
         this.props.history.push("/checkout");
     }
 
     render () {
-
-            const oDisabledInfo = {...INGREDIENT_PRICES};
-            for (let key in oDisabledInfo) {
-                oDisabledInfo[key] = this.props.ings.indexOf(key) < 0;
-            }
 
             let oOrderSummary = ( <OrderSummary
                 ingredients={this.props.ings}
@@ -62,9 +58,14 @@ class BurgerBuilder extends Component {
                 oOrderSummary = <Spinner />
             }
 
-            let burger = null;
+            const burger =  <Burger ingredients={this.props.ings}/>
+
+            const oDisabledInfo = {...INGREDIENT_PRICES};
+
             if (this.props.ings && this.props.ings.length) {
-                burger =  <Burger ingredients={this.props.ings}/>
+                for (let key in oDisabledInfo) {
+                    oDisabledInfo[key] = this.props.ings.indexOf(key) < 0;
+                }
             }
 
             return (
@@ -87,17 +88,18 @@ class BurgerBuilder extends Component {
 
 const mapStateToProps = state => {
     return {
-        ings: state.ingredients,
-        tPrice: state.totalPrice,
-        error: state.error
+        ings: state.burgerBuilder.ingredients,
+        tPrice: state.burgerBuilder.totalPrice,
+        error: state.burgerBuilder.error
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onIngredientAdded: (ingName) => dispatch(burgerBuilderActions.addIngredient(ingName)),
-        onIngredientRemoved: (ingName) => dispatch(burgerBuilderActions.removeIngredient(ingName)),
-        onInitIngredients: () => dispatch(burgerBuilderActions.initIngredients())
+        onIngredientAdded: (ingName) => dispatch(actions.addIngredient(ingName)),
+        onIngredientRemoved: (ingName) => dispatch(actions.removeIngredient(ingName)),
+        onInitIngredients: () => dispatch(actions.initIngredients()),
+        onInitPurchase: () => dispatch(actions.purchaseInit())
     }
 }
 
